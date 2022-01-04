@@ -211,7 +211,18 @@ function update_ps1()
   if [ -n "$(git rev-parse --git-dir 2>/dev/null)" ]; then
     GIT_BRANCH="$(git branch --show-current)"
     PS1+="${RESET}:"
-    PS1+="${BOLD}${YELLOW}${GIT_BRANCH}"
+
+	# Display state of repository
+	# RED => uncommitted changes
+	# YELLOW => all good
+	PS1+="${BOLD}"
+	if [ "$(git diff | wc -l)" -eq 0 ]; then
+		PS1+="${YELLOW}"
+	else
+		PS1+="${RED}"
+	fi
+
+    PS1+="${GIT_BRANCH}"
   fi
 
   # End bracket
