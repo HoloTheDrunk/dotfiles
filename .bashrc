@@ -218,14 +218,14 @@ function update_ps1()
 	# BLUE => behind
 	# GREEN => everything up-to-date
 	PS1+="${BOLD}"
-	if [ "$(git status -sb | grep ahead | wc -l)" -gt 0 ]; then
+	if [ "$(git diff | wc -l)" -gt 0 ] || [ "$(git status | grep -E "(new|modified|deleted)" | wc -l)" -gt 0 ] ; then
+		PS1+="${RED}"
+	elif [ "$(git status -sb | grep ahead | wc -l)" -gt 0 ]; then
 		PS1+="${YELLOW}"
 	elif [ "$(git status -sb | grep behind | wc -l)" -gt 0 ]; then
 		PS1+="${BLUE}"
-	elif [ "$(git diff | wc -l)" -eq 0 ] && [ "$(git status | grep -E "(new|modified|deleted)" | wc -l)" -eq 0 ] ; then
-		PS1+="${GREEN}"
 	else
-		PS1+="${RED}"
+		PS1+="${GREEN}"
 	fi
 
     PS1+="${GIT_BRANCH}"
