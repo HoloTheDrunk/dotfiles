@@ -1,0 +1,11 @@
+[user]
+	name = Raphaël Duhen
+	email = raphael.duhen.nexus@gmail.com
+[core]
+	autocrlf = input
+[credential]
+	helper = cache
+[alias]
+	lol = log --graph --oneline --decorate=full --abbrev-commit
+[merge]
+	conflictStyle = diff3
