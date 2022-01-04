@@ -222,7 +222,7 @@ function update_ps1()
 		PS1+="${YELLOW}"
 	elif [ "$(git status -sb | grep behind | wc -l)" -gt 0 ]; then
 		PS1+="${BLUE}"
-	elif [ "$(git diff | wc -l)" -eq 0 ]; then
+	elif [ "$(git diff | wc -l)" -eq 0 ] && [ "$(git status | grep -E "(new|modified|deleted)" | wc -l)" -eq 0 ] ; then
 		PS1+="${GREEN}"
 	else
 		PS1+="${RED}"
