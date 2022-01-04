@@ -214,10 +214,16 @@ function update_ps1()
 
 	# Display state of repository
 	# RED => uncommitted changes
-	# YELLOW => all good
+	# YELLOW => ahead
+	# BLUE => behind
+	# GREEN => everything up-to-date
 	PS1+="${BOLD}"
-	if [ "$(git diff | wc -l)" -eq 0 ]; then
+	if [ "$(git status -sb | grep ahead | wc -l)" -gt 0 ]; then
 		PS1+="${YELLOW}"
+	elif [ "$(git status -sb | grep behind | wc -l)" -gt 0 ]; then
+		PS1+="${BLUE}"
+	elif [ "$(git diff | wc -l)" -eq 0 ]; then
+		PS1+="${GREEN}"
 	else
 		PS1+="${RED}"
 	fi
