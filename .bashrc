@@ -208,7 +208,7 @@ function update_ps1()
   PS1="${BOLD}${GREEN}["
 
   # Folder path
-  PS1+="${RESET}${FOLDER_PATH}/"
+  PS1+="${RESET}" # ${FOLDER_PATH}
   # File name
   PS1+="${BOLD}${CYAN}${FILE_NAME}"
 
