@@ -138,6 +138,13 @@ ex ()
 
 alias ll='ls -l'
 
+alias brc='vim ~/.bashrc'
+alias vrc='vim ~/.vimrc'
+alias zrc='vim ~/.zshrc'
+alias krc='vim ~/.config/kitty/kitty.conf'
+
+alias reload='source ~/.bashrc'
+
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 . "$HOME/.cargo/env"
 
@@ -148,8 +155,6 @@ function gl()
     lines=$(($(git lol | wc -l) - visible))
     [ $lines -gt 0 ] && echo "$lines older commits..."
 }
-
-alias reload='source ~/.bashrc'
 
 alias gs='git status'
 alias ga='git add'
