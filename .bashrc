@@ -137,6 +137,24 @@ ex ()
 }
 
 alias ll='ls -l'
+alias cs='clear; ls'
+
+function cds()
+{
+	FROM="$(pwd)"
+	DEST="$1"
+
+	clear
+	cd $DEST
+
+	if [ -n "$DEST" ]; then
+		[ "$DEST" != "-" ] && echo "$FROM -> $DEST"
+	else
+		echo "$FROM -> $HOME"
+	fi
+
+	ls
+}
 
 alias brc='vim ~/.bashrc'
 alias vrc='vim ~/.vimrc'
