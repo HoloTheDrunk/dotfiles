@@ -7,6 +7,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'tpope/vim-surround'
 	Plug 'vim-syntastic/syntastic'
 	Plug 'vim-scripts/AutoComplPop'
+	Plug 'vim-scripts/dbext.vim'
 call plug#end()
 
 " Plug vim-easy-align settings
@@ -47,6 +48,9 @@ let g:netrw_banner       = 1
 let g:netrw_browse_split = 4
 let g:netrw_winsize      = 25
 let g:netrw_altv         = 1
+
+" SQL settings
+let g:sql_type_default = 'pgsql'
 
 fun! TrimWhitespace()
 	let l:save = winsaveview()
