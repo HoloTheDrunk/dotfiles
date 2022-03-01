@@ -24,7 +24,7 @@ colors() {
         for bgc in {40..47}; do
             fgc=${fgc#37} # white
             bgc=${bgc#40} # black
-vals="${fgc:+$fgc;}${bgc}"
+            vals="${fgc:+$fgc;}${bgc}"
             vals=${vals%%;}
 
             seq0="${vals:+\e[${vals}m}"
@@ -32,7 +32,7 @@ vals="${fgc:+$fgc;}${bgc}"
             printf " ${seq0}TEXT\e[m"
             printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
         done
-		echo; echo
+        echo; echo
     done
 }
 
@@ -44,11 +44,11 @@ vals="${fgc:+$fgc;}${bgc}"
 #         PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
 #         ;;
 #     screen*)
-#         PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
-#         ;;
-# esac
+    #         PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+    #         ;;
+    # esac
 
-use_color=true
+    use_color=true
 
 # Set colorful PS1 only on colorful terminals.
 # dircolors --print-database uses its own built-in database
@@ -62,46 +62,46 @@ match_lhs=""
 [[ -z ${match_lhs}    ]] \
     && type -P dircolors >/dev/null \
     && match_lhs=$(dircolors --print-database)
-[[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
+    [[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
 
-if ${use_color} ; then
-    # Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
-    if type -P dircolors >/dev/null ; then
-        if [[ -f ~/.dir_colors ]] ; then
-            eval $(dircolors -b ~/.dir_colors)
-        elif [[ -f /etc/DIR_COLORS ]] ; then
-            eval $(dircolors -b /etc/DIR_COLORS)
+    if ${use_color} ; then
+        # Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
+        if type -P dircolors >/dev/null ; then
+            if [[ -f ~/.dir_colors ]] ; then
+                eval $(dircolors -b ~/.dir_colors)
+            elif [[ -f /etc/DIR_COLORS ]] ; then
+                eval $(dircolors -b /etc/DIR_COLORS)
+            fi
+        fi
+
+        if [[ ${EUID} == 0 ]] ; then
+            PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
+        else
+            PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
+        fi
+
+        alias ls='ls --color=auto'
+        alias grep='grep --colour=auto'
+        alias egrep='egrep --colour=auto'
+        alias fgrep='fgrep --colour=auto'
+    else
+        if [[ ${EUID} == 0 ]] ; then
+            # show root@ when we don't have colors
+            PS1='\u@\h \W \$ '
+        else
+            PS1='\u@\h \w \$ '
         fi
     fi
 
-    if [[ ${EUID} == 0 ]] ; then
-        PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
-    else
-        PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
-    fi
+    unset use_color safe_term match_lhs sh
 
-    alias ls='ls --color=auto'
-    alias grep='grep --colour=auto'
-    alias egrep='egrep --colour=auto'
-    alias fgrep='fgrep --colour=auto'
-else
-    if [[ ${EUID} == 0 ]] ; then
-        # show root@ when we don't have colors
-        PS1='\u@\h \W \$ '
-    else
-        PS1='\u@\h \w \$ '
-    fi
-fi
+    alias cp="cp -i"                          # confirm before overwriting something
+    alias df='df -h'                          # human-readable sizes
+    alias free='free -m'                      # show sizes in MB
+    alias np='nano -w PKGBUILD'
+    alias more=less
 
-unset use_color safe_term match_lhs sh
-
-alias cp="cp -i"                          # confirm before overwriting something
-alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
-alias np='nano -w PKGBUILD'
-alias more=less
-
-xhost +local:root > /dev/null 2>&1
+    xhost +local:root > /dev/null 2>&1
 
 # Bash won't get SIGWINCH if another process is in the foreground.
 # Enable checkwinsize so that bash will check the terminal size when
@@ -117,7 +117,7 @@ shopt -s expand_aliases
 shopt -s histappend
 
 # Setup PostgreSQL
-export PGDATA="$HOME/postgres_data"
+export PGDATA="$HOME/.postgres_data"
 export PGHOST="/tmp"
 
 #
@@ -125,24 +125,24 @@ export PGHOST="/tmp"
 # # usage: ex <file>
 ex ()
 {
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1     ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *)           echo "'$1' cannot be extracted via ex()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1   ;;
+            *.tar.gz)    tar xzf $1   ;;
+            *.bz2)       bunzip2 $1   ;;
+            *.rar)       unrar x $1     ;;
+            *.gz)        gunzip $1    ;;
+            *.tar)       tar xf $1    ;;
+            *.tbz2)      tar xjf $1   ;;
+            *.tgz)       tar xzf $1   ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1;;
+            *.7z)        7z x $1      ;;
+            *)           echo "'$1' cannot be extracted via ex()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
 }
 
 function home()
@@ -152,13 +152,22 @@ function home()
     fi
 }
 
+function hist()
+{
+    [ $# -ne 1 ] && echo "Usage: $0 [on|off]" && return 1
+
+    [ "$1" = 'on' ] && set -o history && return 0
+    [ "$1" = 'off' ] && set +o history && return 0
+}
+
+alias lsa='exa -hl'
 alias ll='ls -l'
 alias cs='clear; ls'
 
 function cds()
 {
     FROM="$(home $(pwd))"
-	DEST="$(home $(sed -E "s/~/$HOME/g" <<< "$1"))"
+    DEST="$(home $(sed -E "s/~/$HOME/g" <<< "$1"))"
 
     # clear
 
@@ -210,44 +219,62 @@ alias gp='git push'
 alias gcce='gcc -Werror -Wall -Wextra -std=c99 -fsanitize=address'
 alias gccurses='gcc -pedantic -fsanitize=address -lncurses'
 
-function gccasm()
+function connect-headphones()
 {
-    [ $# -lt 1 ] && echo "Missing file argument" && return 1
-    [ ! -f "$1.S" ] && echo "File '$1.S' does not exist" && return 1
-    [ ! -d "bin" ] && mkdir "bin"
+    bluetoothctl power on
+    bluetoothctl devices | grep "OneOdio A70" | cut -d ' ' -f 2\
+        | xargs bluetoothctl connect
+    }
 
-    ASM="$1"
-    shift 1
+    function changecase()
+    {
+        if [ $# -ne 2 ]; then
+            echo "Usage: $0 [-l|-u] string"
+            return 1
+        fi
 
-    ! gcc "$ASM.S" $@ -g -O0 -o "bin/$ASM" && echo "Could not compile" && return 1
-    [ ! -f "$ASM.bin" ] && ln -s "bin/$ASM" "$ASM.bin"
-}
+        [ "$1" = '-l' ] && tr A-Z a-z <<< $2
+        [ "$1" = '-u' ] && tr a-z A-Z <<< $2
+    }
 
-RESET="\[\033[0m\]"
-BOLD="\[\033[1m\]"
-FAINT="\[\033[2m\]"
-ITALIC="\[\033[3m\]"
-UNDERLINE="\[\033[4m\]"
-SBLINK="\[\033[5m\]"
-RBLINK="\[\033[6m\]"
-INVERT="\[\033[7m\]"
-HIDE="\[\033[8m\]"
-STRIKE="\[\033[9m\]"
+    function gccasm()
+    {
+        [ $# -lt 1 ] && echo "Missing file argument" && return 1
+        [ ! -f "$1.S" ] && echo "File '$1.S' does not exist" && return 1
+        [ ! -d "bin" ] && mkdir "bin"
 
-BLACK="\[\033[30m\]"
-RED="\[\033[31m\]"
-GREEN="\[\033[32m\]"
-YELLOW="\[\033[33m\]"
-BLUE="\[\033[34m\]"
-MAGENTA="\[\033[35m\]"
-CYAN="\[\033[36m\]"
-WHITE="\[\033[37m\]"
+        ASM="$1"
+        shift 1
 
-function update_ps1()
-{
-  # Shrunk path
-  FOLDER_PATH=$(dirname $(pwd) | sed -E 's/^\/home/~/g' | sed -E 's/(\/?)([^/])([^/]+)(\/)?/\1\2\4/g')
-  FILE_NAME=$(basename $(pwd))
+        ! gcc "$ASM.S" $@ -g -O0 -o "bin/$ASM" && echo "Could not compile" && return 1
+        [ ! -f "$ASM.bin" ] && ln -s "bin/$ASM" "$ASM.bin"
+    }
+
+    RESET="\[\033[0m\]"
+    BOLD="\[\033[1m\]"
+    FAINT="\[\033[2m\]"
+    ITALIC="\[\033[3m\]"
+    UNDERLINE="\[\033[4m\]"
+    SBLINK="\[\033[5m\]"
+    RBLINK="\[\033[6m\]"
+    INVERT="\[\033[7m\]"
+    HIDE="\[\033[8m\]"
+    STRIKE="\[\033[9m\]"
+
+    BLACK="\[\033[30m\]"
+    RED="\[\033[31m\]"
+    GREEN="\[\033[32m\]"
+    YELLOW="\[\033[33m\]"
+    BLUE="\[\033[34m\]"
+    MAGENTA="\[\033[35m\]"
+    CYAN="\[\033[36m\]"
+    WHITE="\[\033[37m\]"
+
+    function update_ps1()
+    {
+        # Shrunk path
+        FOLDER_PATH=$(dirname $(pwd) | sed -E 's/^\/home/~/g' | sed -E 's/(\/?)([^/])([^/]+)(\/)?/\1\2\4/g')
+        FILE_NAME=$(basename $(pwd))
 
   # Start bracket
   PS1="${BOLD}${GREEN}["
@@ -259,8 +286,8 @@ function update_ps1()
 
   # Display current branch if in a git repository
   if [ -n "$(git rev-parse --git-dir 2>/dev/null)" ]; then
-    GIT_BRANCH="$(git branch --show-current)"
-    PS1+="${RESET}:"
+      GIT_BRANCH="$(git branch --show-current)"
+      PS1+="${RESET}:"
 
     # Display state of repository
     # RED => uncommitted changes
@@ -283,7 +310,11 @@ function update_ps1()
         PS1+="${GREEN}"
     fi
 
-    PS1+="${GIT_BRANCH}"
+    if [ "$(git rev-parse --show-toplevel)" = "$HOME" ]; then
+        PS1+='~'
+    else
+        PS1+="${GIT_BRANCH}"
+    fi
   fi
 
   # End bracket
@@ -300,5 +331,10 @@ PROMPT_COMMAND='update_ps1'
 
 function find_package()
 {
-	pacman -Slq | fzf --preview 'pacman -Si {}' --layout=reverse
+    pacman -Slq | fzf --preview 'pacman -Si {}' --layout=reverse
 }
+
+
+# BEGIN_KITTY_SHELL_INTEGRATION
+if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
+# END_KITTY_SHELL_INTEGRATION
