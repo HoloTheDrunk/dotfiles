@@ -6,6 +6,8 @@
 [credential]
 	helper = cache
 [alias]
-	lol = log --graph --oneline --decorate=full --abbrev-commit
+	lol = log --graph --oneline --decorate=full --all --author-date-order
 [merge]
 	conflictStyle = diff3
+[init]
+	defaultBranch = master
