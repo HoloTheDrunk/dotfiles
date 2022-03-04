@@ -196,6 +196,7 @@ alias brc='vim ~/.bashrc'
 alias vrc='vim ~/.vimrc'
 alias zrc='vim ~/.zshrc'
 alias krc='vim ~/.config/kitty/kitty.conf'
+alias nvrc='nvim ~/.config/nvim/init.vim'
 
 alias reload='source ~/.bashrc'
 
@@ -337,3 +338,6 @@ function find_package()
 # BEGIN_KITTY_SHELL_INTEGRATION
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
 # END_KITTY_SHELL_INTEGRATION
+
+# XXX REMOVE XXX
+alias tiger='cd $HOME/EPITA/s6/cpp/tiger/src/parse'
