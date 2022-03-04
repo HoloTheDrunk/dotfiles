@@ -26,6 +26,7 @@ call plug#begin()
     " file tree
     Plug 'scrooloose/nerdtree'
     Plug 'ryanoasis/vim-devicons'
+    Plug 'jistr/vim-nerdtree-tabs'
 
     " theme
     Plug 'joshdick/onedark.vim'
@@ -324,7 +325,9 @@ autocmd BufRead,BufNewFile *.fl,*.flex,*.l,*.ll,*.lm setlocal ft=lex
 " bison
 autocmd BufRead,BufNewFile *.y,*.yy,*.ypp,*.ym setlocal ft=yacc
 
+" Open NERDTree and focus main panel
 autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd p
 
 " F*ck whitespace ============================================================
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -359,3 +362,5 @@ nnoremap <silent> <leader><A-h> :FSSplitLeft<cr>
 nnoremap <silent> <leader><A-j> :FSSplitBelow<cr>
 nnoremap <silent> <leader><A-k> :FSSplitAbove<cr>
 nnoremap <silent> <leader><A-l> :FSSplitRight<cr>
+
+map <silent> <Leader>n <plug>NERDTreeTabsToggle<CR>
