@@ -134,6 +134,8 @@ local opts = {
 }
 
 require('rust-tools').setup(opts)
+require('lspconfig').pyright.setup{}
+
 END
 
 "
@@ -364,3 +366,6 @@ nnoremap <silent> <leader><A-k> :FSSplitAbove<cr>
 nnoremap <silent> <leader><A-l> :FSSplitRight<cr>
 
 map <silent> <Leader>n <plug>NERDTreeTabsToggle<CR>
+
+set colorcolumn=80
+au BufEnter *.rs map <silent> <Leader>fr :!cargo fmt<CR>
