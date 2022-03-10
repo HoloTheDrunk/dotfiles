@@ -4,7 +4,7 @@
 
 [[ $- != *i* ]] && return
 
-export VISUAL=vim
+export VISUAL=nvim
 export EDITOR="$VISUAL"
 
 export COLOR_PATH="$HOME/.colors"
@@ -192,10 +192,10 @@ function cds()
 	ls
 }
 
-alias brc='vim ~/.bashrc'
-alias vrc='vim ~/.vimrc'
-alias zrc='vim ~/.zshrc'
-alias krc='vim ~/.config/kitty/kitty.conf'
+alias brc='nvim ~/.bashrc'
+alias vrc='nvim ~/.vimrc'
+alias zrc='nvim ~/.zshrc'
+alias krc='nvim ~/.config/kitty/kitty.conf'
 alias nvrc='nvim ~/.config/nvim/init.vim'
 
 alias reload='source ~/.bashrc'
@@ -334,10 +334,52 @@ function find_package()
 	pacman -Slq | fzf --preview 'pacman -Si {}' --layout=reverse
 }
 
+# XXX
+function blame-all()
+{
+    #FILENAMES="$(find . -name '*.cc' -o -name '*.hh' -o -name '*.hxx' -o -name '*.yy' -o -name '*.ll')"
+    RAW_FILENAMES="$(git ls-tree -r nodes --name-only)"
+    FILENAMES=""
+    FILENAMES+="$(grep '\.cc$' <<< "$RAW_FILENAMES")
+$(grep '\.hh$' <<< "$RAW_FILENAMES")
+$(grep '\.hxx$' <<< "$RAW_FILENAMES")
+$(grep '\.ll$' <<< "$RAW_FILENAMES")
+$(grep '\.yy$' <<< "$RAW_FILENAMES")
+"
+
+    declare -A AUTHORS
+
+    while IFS= read -r file; do
+        [ -z "$file" ] && continue
+        echo "Handling file $file"
+
+        ENTRIES="$(git blame -f "$file" | cut -d ' ' -f 3-4 | cut -c2- | sort | uniq -c | sort -nr | tr -s ' ' | cut -c2-)"
+
+        while IFS= read -r entry; do
+            COUNT="$(cut -d ' ' -f 1 <<< "$entry")"
+            AUTHNAME="$(cut -d ' ' -f 2- <<< "$entry")"
+
+            ([ -z "$AUTHNAME" ] || [ -z "$COUNT" ]) && echo -e "\nError parsing" && return 1
+
+            if [[ "${!AUTHORS[*]}" =~ "$AUTHNAME" ]]; then
+                AUTHORS["$AUTHNAME"]=$((AUTHORS["$AUTHNAME"] + COUNT))
+            else
+                AUTHORS["$AUTHNAME"]=0
+            fi
+        done <<< "$ENTRIES"
+    done <<< "$FILENAMES"
+
+    echo "${#AUTHORS[@]} authors:"
+    for key in "${!AUTHORS[@]}"; do
+        # AUTHNAMEKEY="${AUTHORS["${${!AUTHORS[@]}[$i]}"]} ${AUTHORS[$((i + 1))]}"
+        echo "$key: ${AUTHORS["$key"]}"
+    done | sort -nrk3
+}
+
 
 # BEGIN_KITTY_SHELL_INTEGRATION
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
 # END_KITTY_SHELL_INTEGRATION
 
 # XXX REMOVE XXX
-alias tiger='cd $HOME/EPITA/s6/cpp/tiger/src/parse'
+alias tiger='cd $HOME/EPITA/s6/cpp/tiger/'
