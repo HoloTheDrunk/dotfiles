@@ -10,6 +10,9 @@ export EDITOR="$VISUAL"
 export COLOR_PATH="$HOME/.colors"
 source "$HOME/.logging"
 
+# Utils
+source ~/.utils/z.sh
+
 colors() {
 	local fgc bgc vals seq0
 
@@ -163,6 +166,7 @@ function hist()
 alias lsa='exa -hl'
 alias ll='ls -l'
 alias cs='clear; ls'
+alias osu="dotnet run --project $HOME/Games/osu/osu.Desktop -cv Release"
 
 function cds()
 {
@@ -211,14 +215,32 @@ function gl()
 	[ $lines -gt 0 ] && echo "$lines older commits..."
 }
 
+function gu()
+{
+    git fetch --all
+    git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+    git pull --all
+}
+
 alias gs='git status'
 alias ga='git add'
-alias gc='git commit -m'
+alias gc='git commit'
 alias gt='git tag'
 alias gp='git push'
+alias gd='git diff'
+alias gr='git restore'
+
+alias gpl='git pull'
+alias gcm='git commit -m'
+alias grs='git restore --staged'
+alias gsw='git switch'
 
 alias gcce='gcc -Werror -Wall -Wextra -std=c99 -fsanitize=address'
 alias gccurses='gcc -pedantic -fsanitize=address -lncurses'
+
+alias greg='eval `ssh-agent`; ssh-add'
+
+alias vroom='cargo run'
 
 function connect-headphones()
 {
@@ -338,7 +360,7 @@ function find_package()
 function blame-all()
 {
     #FILENAMES="$(find . -name '*.cc' -o -name '*.hh' -o -name '*.hxx' -o -name '*.yy' -o -name '*.ll')"
-    RAW_FILENAMES="$(git ls-tree -r nodes --name-only)"
+    RAW_FILENAMES="$(git ls-tree -r "$(git branch --show-current)" --name-only)"
     FILENAMES=""
     FILENAMES+="$(grep '\.cc$' <<< "$RAW_FILENAMES")
 $(grep '\.hh$' <<< "$RAW_FILENAMES")
@@ -376,10 +398,117 @@ $(grep '\.yy$' <<< "$RAW_FILENAMES")
     done | sort -nrk3
 }
 
+function todo()
+{
+    [ ! -f "$HOME/.todo" ] && echo "No file at '$HOME/.todo'" && return 1
+    clear
+    cat -n "$HOME/.todo" | tail -n 10
+}
+
+function todo-reg()
+{
+    [ ! -f "$HOME/.todo" ] && echo "No file at '$HOME/.todo'" && return 1
+    echo "$@" >> "$HOME/.todo"
+    todo
+}
+
+function todo-pop()
+{
+    [ ! -f "$HOME/.todo" ] && echo "No file at '$HOME/.todo'." && return 1
+    [ "$#" -ne 1 ] && echo "Usage: todo-pop LINE" && return 1
+    [ "$1" -gt "$(wc -l <> "$HOME/.todo")" ] || [ "$1" -lt 1 ] && echo "Out of bounds line number." && return 1
+    sed -i "$1d" "$HOME/.todo"
+    todo
+}
+
+function lcfiles()
+{
+    RECURSE="$1"
+
+    LIMIT="$2"
+    [ -z "$LIMIT" ] && LIMIT=1
+
+    DEPTH="$3"
+    [ -z "$DEPTH" ] && DEPTH=0
+
+
+    for file in *; do
+        [ "$file" = '*' ] && return 1
+
+        NEW_NAME="$(tr A-Z a-z <<< "$file")"
+
+        for i in $(seq 1 "$DEPTH"); do
+            echo -ne "  "
+        done
+        echo -n "<> "
+
+        if [ ! "$file" = "$NEW_NAME" ]; then
+            if [ -d "$NEW_NAME" ]; then
+                echo "$file/ -> $NEW_NAME/"
+            else
+                echo "$file -> $NEW_NAME"
+            fi
+
+            mv "$file" "$NEW_NAME"
+        else
+            if [ -d "$NEW_NAME" ]; then
+                echo "$NEW_NAME/"
+            else
+                echo "$NEW_NAME"
+            fi
+        fi
+
+        if [ "$DEPTH" -lt "$LIMIT" ] && [ "$RECURSE" = "-r" ] && [ -d "$NEW_NAME" ]; then
+            cd "$NEW_NAME"
+            lcfiles "-r" "$LIMIT" "$((DEPTH + 1))"
+            DEPTH=$((DEPTH - 1))
+            cd ..
+        fi
+    done
+}
+
+function cmake-gen() {
+    [ -f 'CMakeLists.txt' ] && rm 'CMakeLists.txt'
+    touch 'CMakeLists.txt'
+
+    echo 'cmake_minimum_required(VERSION 3.21.2)' >> 'CMakeLists.txt'
+    echo 'project(cmake)' >> 'CMakeLists.txt'
+
+    # SRC listing
+    echo -n "set(SRC " >> 'CMakeLists.txt'
+
+    SOURCE_FILES="$(find -name '*.cc' | cut -d '/' -f 2)"
+
+    i=0
+    len="$(wc -l <<< "$SOURCE_FILES")"
+    for file in $SOURCE_FILES; do
+        [ $i -ne 0 ] && echo -n "        " >> 'CMakeLists.txt'
+        if [ $i -ne $((len - 1)) ]; then
+            echo "$file" >> 'CMakeLists.txt'
+        else
+            echo -n "$file" >> 'CMakeLists.txt'
+        fi
+        i=$((i + 1))
+    done
+    echo ')' >> 'CMakeLists.txt'
+
+    echo 'set(CMAKE_CXX_STANDARD 20)' >> 'CMakeLists.txt'
+    echo 'set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic")' >> 'CMakeLists.txt'
+
+    echo 'add_executable(main ${SRC})' >> 'CMakeLists.txt'
+}
 
 # BEGIN_KITTY_SHELL_INTEGRATION
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
 # END_KITTY_SHELL_INTEGRATION
 
+export PATH="$HOME/.pyenv/shims:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+export PATH="$HOME/.config/bash/nannou:$PATH"
+
 # XXX REMOVE XXX
 alias tiger='cd $HOME/EPITA/s6/cpp/tiger/'
+
+todo
