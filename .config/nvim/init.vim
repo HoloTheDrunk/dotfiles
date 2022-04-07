@@ -231,6 +231,24 @@ cmp.setup({
 })
 EOF
 
+
+" C++ LSP config
+if executable('ccls')
+   au User lsp_setup call lsp#register_server({
+      \ 'name': 'ccls',
+      \ 'cmd': {server_info->['ccls']},
+      \ 'root_uri': {server_info->lsp#utils#path_to_uri(
+      \   lsp#utils#find_nearest_parent_file_directory(
+      \     lsp#utils#get_buffer_path(), ['.ccls', 'compile_commands.json', '.git/']))},
+      \ 'initialization_options': {
+      \   'highlight': { 'lsRanges' : v:true },
+      \   'cache': {'directory': stdpath('cache') . '/ccls' },
+      \ },
+      \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+      \ })
+endif
+
+
 " have a fixed column for the diagnostics to appear in
 " this removes the jitter when warnings/errors flow in
 set signcolumn=yes
@@ -354,9 +372,9 @@ command! JbzCppMan :call s:JbzCppMan()
 
 au FileType cpp nnoremap <buffer>K :JbzCppMan<CR>
 
-au BufEnter *.h  let b:fswitchdst = "c,cpp,cc,m"
-au BufEnter *.cc let b:fswitchdst = "h,hpp"
-au BufEnter *.h let b:fswitchdst = 'c,cpp,m,cc' | let b:fswitchlocs = 'reg:|include.*|src/**|'
+au BufEnter *.hh  let b:fswitchdst = "hxx,cc"
+au BufEnter *.hxx let b:fswitchdst = "cc,hh"
+au BufEnter *.cc let b:fswitchdst = "hh,hxx"
 
 nnoremap <silent> <A-o> :FSHere<cr>
 " Extra hotkeys to open header/source in the split
@@ -369,3 +387,6 @@ map <silent> <Leader>n <plug>NERDTreeTabsToggle<CR>
 
 set colorcolumn=80
 au BufEnter *.rs map <silent> <Leader>fr :!cargo fmt<CR>
+
+" Tiger language
+au BufEnter *.tig,*.tih set ft=tiger
