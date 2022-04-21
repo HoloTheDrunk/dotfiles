@@ -6,6 +6,7 @@
 
 export VISUAL=nvim
 export EDITOR="$VISUAL"
+export BROWSER='/usr/bin/firefox'
 
 export COLOR_PATH="$HOME/.colors"
 source "$HOME/.logging"
@@ -379,7 +380,7 @@ $(grep '\.yy$' <<< "$RAW_FILENAMES")
 
         while IFS= read -r entry; do
             COUNT="$(cut -d ' ' -f 1 <<< "$entry")"
-            AUTHNAME="$(cut -d ' ' -f 2- <<< "$entry")"
+            AUTHNAME="$(cut -d ' ' -f 2- <<< "$entry" | sed -e 's/ë/e/i')"
 
             ([ -z "$AUTHNAME" ] || [ -z "$COUNT" ]) && echo -e "\nError parsing" && return 1
 
@@ -394,7 +395,8 @@ $(grep '\.yy$' <<< "$RAW_FILENAMES")
     echo "${#AUTHORS[@]} authors:"
     for key in "${!AUTHORS[@]}"; do
         # AUTHNAMEKEY="${AUTHORS["${${!AUTHORS[@]}[$i]}"]} ${AUTHORS[$((i + 1))]}"
-        echo "$key: ${AUTHORS["$key"]}"
+        COMMIT_COUNT="$(git log --format='%an' | sed -e 's/ë/e/i' | grep "$key" | wc -l)"
+        echo "$key: ${AUTHORS["$key"]} in $COMMIT_COUNT commits"
     done | sort -nrk3
 }
 
