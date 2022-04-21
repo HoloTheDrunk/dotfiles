@@ -35,6 +35,9 @@ call plug#begin()
     Plug 'nvim-lualine/lualine.nvim'
     Plug 'kyazdani42/nvim-web-devicons'
 
+    " git line status in left margin
+    Plug 'airblade/vim-gitgutter'
+
     " quick switching between header and source files
     Plug 'derekwyatt/vim-fswitch'
 
@@ -387,6 +390,8 @@ map <silent> <Leader>n <plug>NERDTreeTabsToggle<CR>
 
 set colorcolumn=80
 au BufEnter *.rs map <silent> <Leader>fr :!cargo fmt<CR>
+
+map <silent> <Leader>gd :GitGutterLineHighlightsToggle<CR>
 
 " Tiger language
 au BufEnter *.tig,*.tih set ft=tiger
