@@ -38,17 +38,7 @@ colors() {
 
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
-# Change the window title of X terminals
-# case ${TERM} in
-#     xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
-#         PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
-#         ;;
-#     screen*)
-  #         PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
-  #         ;;
-  # esac
-
-  use_color=true
+use_color=true
 
 # Set colorful PS1 only on colorful terminals.
 # dircolors --print-database uses its own built-in database
@@ -93,15 +83,15 @@ match_lhs=""
     fi
   fi
 
-  unset use_color safe_term match_lhs sh
+unset use_color safe_term match_lhs sh
 
-  alias cp="cp -i"                          # confirm before overwriting something
-  alias df='df -h'                          # human-readable sizes
-  alias free='free -m'                      # show sizes in MB
-  alias np='nano -w PKGBUILD'
-  alias more=less
+alias cp="cp -i"                          # confirm before overwriting something
+alias df='df -h'                          # human-readable sizes
+alias free='free -m'                      # show sizes in MB
+alias np='nano -w PKGBUILD'
+alias more=less
 
-  xhost +local:root > /dev/null 2>&1
+xhost +local:root > /dev/null 2>&1
 
 # Bash won't get SIGWINCH if another process is in the foreground.
 # Enable checkwinsize so that bash will check the terminal size when
@@ -120,9 +110,8 @@ shopt -s histappend
 export PGDATA="$HOME/.postgres_data"
 export PGHOST="/tmp"
 
-#
-# # ex - archive extractor
-# # usage: ex <file>
+# ex - archive extractor
+# usage: ex <file>
 ex ()
 {
   if [ -f $1 ] ; then
@@ -165,34 +154,6 @@ alias ll='ls -l'
 alias cs='clear; ls'
 alias osu="dotnet run --project $HOME/Games/osu/osu.Desktop -cv Release"
 
-function cds()
-{
-  FROM="$(home $(pwd))"
-  DEST="$(home $(sed -E "s/~/$HOME/g" <<< "$1"))"
-
-  # clear
-
-  cd $DEST 2>/dev/null || echo "$0: cd failed with arg '$DEST'"
-
-  DEST="$(home $(pwd))"
-
-  if [ -n "$DEST" ]; then
-
-    if [ "$DEST" != "-" ]; then
-      [ "$FROM" = "$DEST" ] && return
-      echo "$FROM -> $DEST"
-    else
-      [ "$FROM" = "$DEST" ] && return
-      echo "$FROM -> $DEST"
-    fi
-  else
-    [ "$FROM" = "~" ] && return
-    echo "$FROM -> ~"
-  fi
-
-  ls
-}
-
 function cpm() {
     [ $# -ne 2 ] && echo "Usage: cpm <source> <dest folder>." && return 1
     test -f "$2" && echo "Destination must be a folder." && return 1
@@ -226,7 +187,7 @@ function gu()
 
 alias gs='git status'
 alias ga='git add'
-alias gc='git commit'
+alias gc='git commit -v'
 alias gt='git tag'
 alias gp='git push'
 alias gd='git diff'
@@ -234,8 +195,10 @@ alias gr='git restore'
 
 alias gpl='git pull'
 alias gcm='git commit -m'
+alias gca='git commit --amend'
 alias grs='git restore --staged'
 alias gsw='git switch'
+alias gri='git rebase -i'
 
 alias gcce='gcc -Werror -Wall -Wextra -std=c99 -fsanitize=address'
 alias gccurses='gcc -pedantic -fsanitize=address -lncurses'
