@@ -9,10 +9,6 @@ export EDITOR="$VISUAL"
 export BROWSER='/usr/bin/firefox'
 
 export COLOR_PATH="$HOME/.colors"
-source "$HOME/.logging"
-
-# Utils
-source ~/.utils/z.sh
 
 colors() {
   local fgc bgc vals seq0
@@ -204,9 +200,6 @@ alias krc='nvim ~/.config/kitty/kitty.conf'
 alias nvrc='nvim ~/.config/nvim/init.vim'
 
 alias reload='source ~/.bashrc'
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-. "$HOME/.cargo/env"
 
 function gl()
 {
@@ -406,7 +399,7 @@ $(grep '\.yy$' <<< "$RAW_FILENAMES")
 function todo()
 {
     [ ! -f "$HOME/.todo" ] && echo "No file at '$HOME/.todo'" && return 1
-    clear
+    # clear
     cat -n "$HOME/.todo" | tail -n 10
 }
 
@@ -505,7 +498,8 @@ function cmake-gen() {
 
 function bright() {
     [ $# -ne 1 ] || [ "$1" = "--help" ] && "Usage: bright [0..1]" && exit 1
-    xrandr --output eDP-1 --brightness "$1"
+    MONITOR="$(xrandr --listmonitors | grep '0:' | sed -E 's/ /\n/g' | tail -n 1)"
+    xrandr --output "$MONITOR" --brightness "$1"
 }
 
 function scan_wifi() {
