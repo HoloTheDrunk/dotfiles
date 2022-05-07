@@ -314,35 +314,36 @@ function update_ps1()
 
   # Display current branch if in a git repository
   if [ -n "$(git rev-parse --git-dir 2>/dev/null)" ]; then
-  GIT_BRANCH="$(git branch --show-current)"
-  PS1+="${RESET}:"
+    GIT_BRANCH="$(git branch --show-current)"
 
-  # Display state of repository
-  # RED => uncommitted changes
-  # MAGENTA => both ahead and behind
-  # YELLOW => ahead
-  # BLUE => behind
-  # GREEN => everything up-to-date
-  AHEAD="$(git status -sb | grep ahead | wc -l)"
-  BEHIND="$(git status -sb | grep behind | wc -l)"
-  PS1+="${BOLD}"
-  if [ "$(git diff | wc -l)" -gt 0 ] || [ "$(git status | grep -E "(new|modified|deleted)" | wc -l)" -gt 0 ] ; then
-    PS1+="${RED}"
-  elif [ "$AHEAD" -gt 0 ] && [ "$BEHIND" -gt 0 ]; then
-    PS1+="${MAGENTA}"
-  elif [ "$AHEAD" -gt 0 ]; then
-    PS1+="${YELLOW}"
-  elif [ "$BEHIND" -gt 0 ]; then
-    PS1+="${BLUE}"
-  else
-    PS1+="${GREEN}"
-  fi
+    PS1+=":"
 
-  if [ "$(git rev-parse --show-toplevel)" = "$HOME" ]; then
-    PS1+='~'
-  else
-    PS1+="${GIT_BRANCH}"
-  fi
+    # Display state of repository
+    # RED => uncommitted changes
+    # MAGENTA => both ahead and behind
+    # YELLOW => ahead
+    # BLUE => behind
+    # GREEN => everything up-to-date
+    AHEAD="$(git status -sb | grep ahead | wc -l)"
+    BEHIND="$(git status -sb | grep behind | wc -l)"
+    PS1+="${BOLD}"
+    if [ "$(git diff | wc -l)" -gt 0 ] || [ "$(git status | grep -E "(new|modified|deleted)" | wc -l)" -gt 0 ] ; then
+      PS1+="${RED}"
+    elif [ "$AHEAD" -gt 0 ] && [ "$BEHIND" -gt 0 ]; then
+      PS1+="${MAGENTA}"
+    elif [ "$AHEAD" -gt 0 ]; then
+      PS1+="${YELLOW}"
+    elif [ "$BEHIND" -gt 0 ]; then
+      PS1+="${BLUE}"
+    else
+      PS1+="${GREEN}"
+    fi
+
+    if [ "$(git rev-parse --show-toplevel)" = "$HOME" ]; then
+      PS1+='~'
+    else
+      PS1+="${GIT_BRANCH}"
+    fi
   fi
 
   # End bracket
@@ -500,6 +501,27 @@ function cmake-gen() {
     echo 'set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic")' >> 'CMakeLists.txt'
 
     echo 'add_executable(main ${SRC})' >> 'CMakeLists.txt'
+}
+
+function bright() {
+    [ $# -ne 1 ] || [ "$1" = "--help" ] && "Usage: bright [0..1]" && exit 1
+    xrandr --output eDP-1 --brightness "$1"
+}
+
+function scan_wifi() {
+    # ip addr | grep -E 'inet .* wlo1' | sed -E 's/ /\n/g' | grep -E '\..*/' | head -n 1 | xargs nmap -sn
+    OUTPUT="$(ip addr \
+        | grep -E 'inet .* wlo1' \
+        | sed -E 's/ /\n/g' \
+        | grep -E '\..*/' \
+        | head -n 1 \
+        | xargs nmap -sn \
+        | grep -E '([0-9]{1,3}\.){3}[0-9]{1,3}' \
+        | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})')"
+
+    for addr in "$OUTPUT"; do
+        nmap -sP "$addr"
+    done
 }
 
 # BEGIN_KITTY_SHELL_INTEGRATION
