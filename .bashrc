@@ -193,6 +193,14 @@ function cds()
   ls
 }
 
+function cpm() {
+    [ $# -ne 2 ] && echo "Usage: cpm <source> <dest folder>." && return 1
+    test -f "$2" && echo "Destination must be a folder." && return 1
+
+    mkdir -p "$2"
+    cp "$1" "$2"
+}
+
 alias brc='nvim ~/.bashrc'
 alias vrc='nvim ~/.vimrc'
 alias zrc='nvim ~/.zshrc'
