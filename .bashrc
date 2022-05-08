@@ -110,6 +110,9 @@ shopt -s histappend
 export PGDATA="$HOME/.postgres_data"
 export PGHOST="/tmp"
 
+# Setup Cargo
+. "$HOME/.cargo/env"
+
 # ex - archive extractor
 # usage: ex <file>
 ex ()

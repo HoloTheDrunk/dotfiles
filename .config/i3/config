@@ -67,6 +67,8 @@ bindsym $mod+d exec --no-startup-id rofi -display-drun "> " -show drun
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
+bindsym Print exec scrot $HOME/Images/screenshots/%Y-%m-%d_%H-%M-%S.png
+
 # change focus
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
