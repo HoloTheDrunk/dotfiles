@@ -64,6 +64,11 @@ call plug#begin()
     " Snippet engine
     Plug 'hrsh7th/vim-vsnip'
 
+    " Web dev
+    Plug 'evanleck/vim-svelte'
+    Plug 'pangloss/vim-javascript'
+    Plug 'HerringtonDarkholme/yats.vim'
+
     " Optional
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
@@ -138,6 +143,7 @@ local opts = {
 
 require('rust-tools').setup(opts)
 require('lspconfig').pyright.setup{}
+require('lspconfig').svelte.setup{}
 
 END
 
