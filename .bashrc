@@ -476,22 +476,6 @@ function bright() {
     xrandr --output "$MONITOR" --brightness "$1"
 }
 
-function scan_wifi() {
-    # ip addr | grep -E 'inet .* wlo1' | sed -E 's/ /\n/g' | grep -E '\..*/' | head -n 1 | xargs nmap -sn
-    OUTPUT="$(ip addr \
-        | grep -E 'inet .* wlo1' \
-        | sed -E 's/ /\n/g' \
-        | grep -E '\..*/' \
-        | head -n 1 \
-        | xargs nmap -sn \
-        | grep -E '([0-9]{1,3}\.){3}[0-9]{1,3}' \
-        | grep -Eo '([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})')"
-
-    for addr in "$OUTPUT"; do
-        nmap -sP "$addr"
-    done
-}
-
 # BEGIN_KITTY_SHELL_INTEGRATION
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
 # END_KITTY_SHELL_INTEGRATION
