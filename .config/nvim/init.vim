@@ -73,6 +73,7 @@ call plug#begin()
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
+    Plug 'andweeb/presence.nvim'
 call plug#end()
 
 lua << END
@@ -398,6 +399,10 @@ set colorcolumn=80
 au BufEnter *.rs map <silent> <Leader>fr :!cargo fmt<CR>
 
 map <silent> <Leader>gd :GitGutterLineHighlightsToggle<CR>
+map <silent> <Leader>` :b#<CR>
 
 " Tiger language
 au BufEnter *.tig,*.tih set ft=tiger
+
+" disable default keyword-based completion
+set complete=
