@@ -74,6 +74,9 @@ call plug#begin()
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'andweeb/presence.nvim'
+
+    " Pest PEG grammar file syntax highlighting
+    Plug 'pest-parser/pest.vim'
 call plug#end()
 
 lua << END
