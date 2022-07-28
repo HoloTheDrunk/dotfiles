@@ -75,6 +75,11 @@ call plug#begin()
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'andweeb/presence.nvim'
 
+    " Remove me maybe
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'lighttiger2505/deoplete-vim-lsp'
+
     " Pest PEG grammar file syntax highlighting
     Plug 'pest-parser/pest.vim'
 call plug#end()
@@ -246,6 +251,7 @@ EOF
 
 
 " C++ LSP config
+" setting with vim-lsp
 if executable('ccls')
    au User lsp_setup call lsp#register_server({
       \ 'name': 'ccls',
@@ -260,7 +266,6 @@ if executable('ccls')
       \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
       \ })
 endif
-
 
 " have a fixed column for the diagnostics to appear in
 " this removes the jitter when warnings/errors flow in
@@ -396,13 +401,14 @@ nnoremap <silent> <leader><A-j> :FSSplitBelow<cr>
 nnoremap <silent> <leader><A-k> :FSSplitAbove<cr>
 nnoremap <silent> <leader><A-l> :FSSplitRight<cr>
 
-map <silent> <Leader>n <plug>NERDTreeTabsToggle<CR>
+noremap <silent> <Leader>n <plug>NERDTreeTabsToggle<CR>
 
 set colorcolumn=80
-au BufEnter *.rs map <silent> <Leader>fr :!cargo fmt<CR>
+au BufEnter *.rs noremap <silent> <Leader>fr :!cargo fmt<CR>
 
-map <silent> <Leader>gd :GitGutterLineHighlightsToggle<CR>
-map <silent> <Leader>` :b#<CR>
+noremap <silent> <Leader>gd :GitGutterLineHighlightsToggle<CR>
+noremap <silent> <Leader>` :b#<CR>
+noremap <silent> <C-_> ^I//<Space><Esc>
 
 " Tiger language
 au BufEnter *.tig,*.tih set ft=tiger

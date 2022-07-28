@@ -240,6 +240,17 @@ function gccasm()
   [ ! -f "$ASM.bin" ] && ln -s "bin/$ASM" "$ASM.bin"
 }
 
+function gccada()
+{
+    [ $# -eq 0 ] && echo "Usage: gccada main [file...]" && return 1
+
+    BIN="${1%.*}"
+
+    # gcc -c "$@" && gnatbind "$BIN" && gnatlink "$BIN"
+    gnat make -gnata "$@"
+    gnatclean -c "$@" 1>/dev/null
+}
+
 RESET="\[\033[0m\]"
 BOLD="\[\033[1m\]"
 FAINT="\[\033[2m\]"
@@ -490,3 +501,16 @@ export PATH="$HOME/.config/bash/nannou:$PATH"
 alias tiger='cd $HOME/EPITA/s6/cpp/tiger/'
 
 todo
+export GPG_TTY=$(tty)
+
+# Activate completion scripts
+for file in "$HOME"/.config/bash/completion/*.sh; do
+    source "$file"
+done
+
+alias yeet-orphans='sudo pacman -Qtdq | sudo pacman -Rns -'
+
+# pnpm
+export PNPM_HOME="/home/raphaeld/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
