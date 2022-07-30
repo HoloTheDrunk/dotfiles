@@ -491,10 +491,6 @@ function bright() {
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
 # END_KITTY_SHELL_INTEGRATION
 
-export PATH="$HOME/.pyenv/shims:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
 export PATH="$HOME/.config/bash/nannou:$PATH"
 
 # XXX REMOVE XXX
@@ -504,9 +500,11 @@ todo
 export GPG_TTY=$(tty)
 
 # Activate completion scripts
-for file in "$HOME"/.config/bash/completion/*.sh; do
-    source "$file"
-done
+if [ -d "$HOME/.config/bash/completion/" ]; then
+	for file in "$HOME"/.config/bash/completion/*.sh; do
+		[ -f "$file" ] && source "$file"
+	done
+fi
 
 alias yeet-orphans='sudo pacman -Qtdq | sudo pacman -Rns -'
 
