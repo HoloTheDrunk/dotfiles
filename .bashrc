@@ -70,7 +70,7 @@ match_lhs=""
       PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
     fi
 
-    alias ls='ls --color=auto'
+    alias ls='exa'
     alias grep='grep --colour=auto'
     alias egrep='egrep --colour=auto'
     alias fgrep='fgrep --colour=auto'
@@ -90,6 +90,12 @@ alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
+
+function truerm() {
+  test $# -lt 1 && echo "Usage: truerm FILE" && return 1
+  head -c $(wc -c $1 | cut -d ' ' -f 1) /dev/random > $1
+  rm $1
+}
 
 xhost +local:root > /dev/null 2>&1
 
@@ -152,8 +158,10 @@ function hist()
   [ "$1" = 'off' ] && set +o history && return 0
 }
 
+alias j='jobs'
 alias lsa='exa -hl'
-alias ll='ls -l'
+alias ll='exa -l'
+alias lt='exa -TL'
 alias cs='clear; ls'
 alias osu="dotnet run --project $HOME/Games/osu/osu.Desktop -cv Release"
 
@@ -273,6 +281,7 @@ WHITE="\[\033[37m\]"
 
 function update_ps1()
 {
+  LAST_CMD_RES="$?"
   # Shrunk path
   FOLDER_PATH=$(dirname $(pwd) | sed -E 's/^\/home/~/g' | sed -E 's/(\/?)([^/])([^/]+)(\/)?/\1\2\4/g')
   FILE_NAME=$(basename $(pwd))
@@ -326,6 +335,10 @@ function update_ps1()
 
   # End bracket
   PS1+="${BOLD}${GREEN}]${RESET}"
+
+  if [ "$LAST_CMD_RES" -ne 0 ]; then
+    PS1+="${BOLD}${GREEN}{${RED}$LAST_CMD_RES${GREEN}}${RESET}"
+  fi
 
   # Line start marker
   PS1+="${BOLD}${GREEN}$ ${RESET}"
@@ -479,12 +492,6 @@ function cmake-gen() {
     echo 'set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic")' >> 'CMakeLists.txt'
 
     echo 'add_executable(main ${SRC})' >> 'CMakeLists.txt'
-}
-
-function bright() {
-    [ $# -ne 1 ] || [ "$1" = "--help" ] && "Usage: bright [0..1]" && exit 1
-    MONITOR="$(xrandr --listmonitors | grep '0:' | sed -E 's/ /\n/g' | tail -n 1)"
-    xrandr --output "$MONITOR" --brightness "$1"
 }
 
 # BEGIN_KITTY_SHELL_INTEGRATION
