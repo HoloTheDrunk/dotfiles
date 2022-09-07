@@ -35,6 +35,8 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+exec --no-startup-id nitrogen --restore
+
 # xfce4-clipman is a clipboard manager, necessary for proper integration with
 # xfce4-screenshooter when trying to save screenshots to the clipboard.
 exec xfce4-clipman
@@ -59,7 +61,7 @@ set $right semicolon
 floating_modifier $mod
 
 # i3lock
-bindsym $mod+Shift+l exec i3lock -i "$HOME/Images/backgrounds/nnight-avatar.png"
+bindsym $mod+Shift+l exec i3lock-multimonitor -i Images/backgrounds/bg.png
 
 # start a terminal
 bindsym $mod+Return exec kitty
@@ -72,6 +74,7 @@ bindsym $mod+Shift+s exec xfce4-screenshooter --clipboard --region
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id rofi -display-drun "> " -show drun
+bindsym $mod+Shift+d exec --no-startup-id rofi -display-window "> " -show window
 
 # A more modern dmenu replacement is rofi:
 # bindsym $mod+d exec "rofi -modi drun,run -show drun"
@@ -175,6 +178,14 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
+# workspace settings
+workspace_auto_back_and_forth yes
+
+# default workspace on spawn
+assign [class="^Code$"] 2
+assign [class="Gnome-terminal"] 3
+assign [class="jetbrains-datagrip"] 4
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -231,3 +242,5 @@ bindsym $mod+Shift+z    gaps outer current minus 5
 
 exec_always --no-startup-id picom
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
+exec_always --no-startup-id setxkbmap -option caps:escape
