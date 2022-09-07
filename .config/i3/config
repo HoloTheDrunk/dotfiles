@@ -61,7 +61,7 @@ set $right semicolon
 floating_modifier $mod
 
 # i3lock
-bindsym $mod+Shift+l exec i3lock-multimonitor -i Images/backgrounds/bg.png
+bindsym $mod+Shift+l exec i3lock-custom
 
 # start a terminal
 bindsym $mod+Return exec kitty
