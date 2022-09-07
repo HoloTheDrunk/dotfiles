@@ -163,7 +163,6 @@ alias lsa='exa -hl'
 alias ll='exa -l'
 alias lt='exa -TL'
 alias cs='clear; ls'
-alias osu="dotnet run --project $HOME/Games/osu/osu.Desktop -cv Release"
 
 function cpm() {
     [ $# -ne 2 ] && echo "Usage: cpm <source> <dest folder>." && return 1
@@ -195,6 +194,8 @@ function gu()
     git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
     git pull --all
 }
+
+alias lg='lazygit'
 
 alias gs='git status'
 alias ga='git add'
@@ -508,14 +509,17 @@ export GPG_TTY=$(tty)
 
 # Activate completion scripts
 if [ -d "$HOME/.config/bash/completion/" ]; then
-	for file in "$HOME"/.config/bash/completion/*.sh; do
-		[ -f "$file" ] && source "$file"
-	done
+  for file in "$HOME"/.config/bash/completion/*.sh; do
+    [ -f "$file" ] && source "$file"
+  done
 fi
 
 alias yeet-orphans='sudo pacman -Qtdq | sudo pacman -Rns -'
+alias pipes='pipes-rs -p 100 -k heavy,light -c rgb -d 10 -r 1 -t 0.1 --palette matrix'
 
 # pnpm
 export PNPM_HOME="/home/raphaeld/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
+
+export STOCKLY_MAIN="$HOME/Stockly/Main"
 # pnpm end
