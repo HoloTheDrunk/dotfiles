@@ -10,3 +10,6 @@ git remote add origin git@github.com:HoloTheDrunk/dotfiles.git
 git fetch
 git checkout -f master
 ```
+
+# Where is stuff?
+X keyboard options lists: /usr/share/X11/xkb/rules/*.lst
