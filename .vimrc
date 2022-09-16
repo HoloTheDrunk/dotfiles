@@ -46,8 +46,13 @@ inoremap {<CR> {<CR>}<Esc>ko
 let g:netrw_liststyle    = 3
 let g:netrw_banner       = 1
 let g:netrw_browse_split = 4
-let g:netrw_winsize      = 25
+let g:netrw_winsize      = 20
 let g:netrw_altv         = 1
+aug FileBrowser
+    au!
+    au VimEnter * :Vexplore
+    au VimEnter * :wincmd l
+aug END
 
 " SQL settings
 let g:sql_type_default = 'pgsql'
