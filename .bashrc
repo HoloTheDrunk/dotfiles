@@ -516,6 +516,7 @@ fi
 
 alias yeet-orphans='sudo pacman -Qtdq | sudo pacman -Rns -'
 alias pipes='pipes-rs -p 100 -k heavy,light -c rgb -d 10 -r 1 -t 0.1 --palette matrix'
+alias bloomrpc='~/Stockly/BloomRPC-1.5.3.AppImage --disable-features=VizDisplayCompositor'
 
 # pnpm
 export PNPM_HOME="/home/raphaeld/.local/share/pnpm"
