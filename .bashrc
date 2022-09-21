@@ -515,8 +515,14 @@ if [ -d "$HOME/.config/bash/completion/" ]; then
 fi
 
 alias yeet-orphans='sudo pacman -Qtdq | sudo pacman -Rns -'
-alias pipes='pipes-rs -p 100 -k heavy,light -c rgb -d 10 -r 1 -t 0.1 --palette matrix'
-alias bloomrpc='~/Stockly/BloomRPC-1.5.3.AppImage --disable-features=VizDisplayCompositor'
+
+if ! command -v pipes-rs &>/dev/null; then
+  alias pipes='pipes-rs -p 100 -k heavy,light -c rgb -d 10 -r 1 -t 0.1 --palette matrix'
+fi
+
+if test "$(cat /etc/hostname)" = "efarch"; then
+  alias bloomrpc='~/Stockly/BloomRPC-1.5.3.AppImage --disable-features=VizDisplayCompositor'
+fi
 
 # pnpm
 export PNPM_HOME="/home/raphaeld/.local/share/pnpm"
