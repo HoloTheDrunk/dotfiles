@@ -19,17 +19,21 @@ Rust cargo:
 AUR helper:
   yay
 
-polybar
-rofi
-rust
-xfce4-clipman
-xfce4-screenshooter
+PACMAN:
+  polybar
+  rofi
+  rust
+  xdotool
+
+AUR:
+  xfce4-clipman
+  xfce4-screenshooter
 ```
 
 # Quickstart
 Save this in a script and run it
 ```bash
-sudo pacman -Syyu polybar rofi
+sudo pacman -Syyu polybar rofi xdotool
 yay xfce4-screenshooter
 yay xfce4-clipman
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
