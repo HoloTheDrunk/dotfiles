@@ -27,5 +27,6 @@ fi
 if test "$(xrandr --query | grep '\sconnected' | wc -l)" -eq 1; then
   i3lock -i ~/.bgcache/"$FILENAME".png
 else
-  i3lock-multimonitor -i ~/.bgcache/"$FILENAME".png
+  # i3lock-multimonitor -i ~/.bgcache/"$FILENAME".png
+  i3lock -ti ~/.bgcache/"$FILENAME".png
 fi
