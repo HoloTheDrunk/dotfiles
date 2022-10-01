@@ -224,6 +224,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # remove all borders
+for_window [class=".*"] border none
 default_border none
 hide_edge_borders both
 
