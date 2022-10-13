@@ -3,6 +3,12 @@ local user_plugin_opts = astronvim.user_plugin_opts
 local conditional_func = astronvim.conditional_func
 
 astronvim.lsp.on_attach = function(client, bufnr)
+  require("lsp_signature").on_attach({
+    bind = true,
+    handler_opts = {
+      border = "rounded"
+    }
+  }, bufnr);
   astronvim.set_mappings(
     user_plugin_opts("lsp.mappings", {
       n = {
