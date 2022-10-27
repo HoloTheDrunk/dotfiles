@@ -224,6 +224,22 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+set $background "#222d31"
+set $background-alt "#373b41"
+set $text-focused "#f0c674"
+set $text-unfocused "#8ABEB7"
+
+# class                 border          backgr.         text            indicator       child_border
+client.focused          $background-alt $background-alt $text-focused   #2e9ef4         #285577
+client.focused_inactive $background-alt $background-alt $text-unfocused #484e50         #5f676a
+client.unfocused        $background     $background     $text-unfocused #292d2e         #222222
+client.urgent           #2f343a         #900000         #ffffff         #900000         #900000
+client.placeholder      #000000         #0c0c0c         #ffffff         #000000         #0c0c0c
+
+client.background       #ffffff
+
+title_align center
+
 # remove all borders
 for_window [class=".*"] border none
 default_border none
