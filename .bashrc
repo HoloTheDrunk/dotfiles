@@ -555,7 +555,6 @@ export PGHOST="/tmp"
 PATH="/home/raphaeld/.scripts/scripts/.symlinks:$PATH"
 
 export JUPYTERLAB_DIR="$HOME/.local/share/jupyter/lab"
-export OPENAI_API_KEY="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"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
