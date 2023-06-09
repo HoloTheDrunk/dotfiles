@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 if [ $# -ne 1 ] || [ "$1" = "--help" ]; then
   echo "Usage: bright [0..1]"
@@ -19,5 +19,8 @@ while IFS= read -r line; do
 
   echo "Adjusting brightness for $MONITOR."
 
-  xrandr --output "$MONITOR" --brightness "$1"
+  # Old method, linear gamma adjustment
+  # xrandr --output "$MONITOR" --brightness "$1"
+
+  xbacklight -display "$MONITOR" -set "$1"
 done <<< "$MONITORS"
