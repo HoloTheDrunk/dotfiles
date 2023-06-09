@@ -184,7 +184,7 @@ function gl()
 {
   [ $# -eq 1 ] && [ "$1" -ge 0 ] && visible="$1" || visible=10
   git lol -"$visible"
-  lines=$(($(git lol | wc -l) - visible))
+  lines=$(($(git lol | grep -E '^([*/|\]|\s)*[0-9a-f]' |  wc -l) - visible - 1))
   [ $lines -gt 0 ] && echo "$lines older commits..."
 }
 
@@ -256,8 +256,13 @@ function gccada()
     BIN="${1%.*}"
 
     # gcc -c "$@" && gnatbind "$BIN" && gnatlink "$BIN"
-    gnat make -gnata "$@"
-    gnatclean -c "$@" 1>/dev/null
+    gnat make -gnata "$@" &>/dev/null
+    gnatclean -c "$@" &>/dev/null
+
+    COMMAND="./$BIN"
+
+    echo "'$COMMAND' copied to clipboard"
+    echo -n "$COMMAND" | xsel -b
 }
 
 RESET="\[\033[0m\]"
@@ -284,8 +289,8 @@ function update_ps1()
 {
   LAST_CMD_RES="$?"
   # Shrunk path
-  FOLDER_PATH=$(dirname $(pwd) | sed -E 's/^\/home/~/g' | sed -E 's/(\/?)([^/])([^/]+)(\/)?/\1\2\4/g')
-  FILE_NAME=$(basename $(pwd))
+  FOLDER_PATH=$(dirname "$(pwd)" | sed -E 's/^\/home/~/g' | sed -E 's/(\/?)([^/])([^/]+)(\/)?/\1\2\4/g')
+  FILE_NAME=$(basename "$(pwd)")
 
   # Start bracket
   PS1="${BOLD}${GREEN}[${RESET}"
@@ -329,6 +334,10 @@ function update_ps1()
 
     if [ "$(git rev-parse --show-toplevel)" = "$HOME" ]; then
       PS1+='~'
+
+      if [ "${GIT_BRANCH}" != "master" ] && [ "${GIT_BRANCH}" != "main" ]; then
+        PS1+="${GIT_BRANCH}"
+      fi
     else
       PS1+="${GIT_BRANCH}"
     fi
@@ -495,6 +504,10 @@ function cmake-gen() {
     echo 'add_executable(main ${SRC})' >> 'CMakeLists.txt'
 }
 
+function cmake-lsp() {
+  cmake $@ -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+}
+
 # BEGIN_KITTY_SHELL_INTEGRATION
 if test -n "$KITTY_INSTALLATION_DIR" -a -e "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; then source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"; fi
 # END_KITTY_SHELL_INTEGRATION
@@ -516,7 +529,13 @@ fi
 
 alias yeet-orphans='sudo pacman -Qtdq | sudo pacman -Rns -'
 
-if ! command -v pipes-rs &>/dev/null; then
+function kittyc {
+  kitty @ set-colors -a "$HOME/.config/kitty/$1.conf"
+}
+
+alias icat="kitty +kitten icat"
+
+if command -v pipes-rs &>/dev/null; then
   alias pipes='pipes-rs -p 100 -k heavy,light -c rgb -d 10 -r 1 -t 0.1 --palette matrix'
 fi
 
@@ -530,3 +549,16 @@ export PATH="$PNPM_HOME:$PATH"
 
 export STOCKLY_MAIN="$HOME/Stockly/Main"
 # pnpm end
+export PGDATA="$HOME/postgres_data"
+export PGHOST="/tmp"
+
+PATH="/home/raphaeld/.scripts/scripts/.symlinks:$PATH"
+
+export JUPYTERLAB_DIR="$HOME/.local/share/jupyter/lab"
+export OPENAI_API_KEY="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"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH
+
+export EPITA_LOGIN="raphael.duhen"

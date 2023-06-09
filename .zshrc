@@ -189,3 +189,6 @@ export FZF_DEFAULT_OPTS="--layout=reverse --inline-info --height=80%"
 
 # opam configuration
 [[ ! -r /home/raphaeld/.opam/opam-init/init.zsh ]] || source /home/raphaeld/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+PATH="/home/raphaeld/Stockly/Main/integrations/scripts/.symlinks:$PATH"
+PATH="/home/raphaeld/scripts/.symlinks:$PATH"
+PATH="/home/raphaeld/.scripts/scripts/.symlinks:$PATH"
