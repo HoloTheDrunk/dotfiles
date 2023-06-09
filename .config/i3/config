@@ -183,12 +183,12 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 workspace_auto_back_and_forth yes
 
 # default workspace on spawn
-assign [class="^Code$"] 2
-assign [class="Gnome-terminal"] 3
-assign [class="jetbrains-datagrip"] 4
+# assign [class="^Code$"] 2
+# assign [class="Gnome-terminal"] 3
+# assign [class="jetbrains-datagrip"] 4
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -251,12 +251,17 @@ gaps outer 5
 
 bindsym $mod+z          gaps outer current plus 5
 bindsym $mod+Shift+z    gaps outer current minus 5
+bindsym $mod+c          gaps inner current plus 5
+bindsym $mod+Shift+c    gaps inner current minus 5
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 #bar {
 #        status_command i3status
 #}
+
+# auto float windows with "[debug]" in their name
+# for_window [class=".*[debug].*"] floating enable
 
 exec_always --no-startup-id picom
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
